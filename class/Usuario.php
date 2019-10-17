@@ -53,7 +53,7 @@ class Usuario {
 
 			$row = $results[0];            // como é um array de array, e retorna apenas 1 reg, pegamos a posição zero
 
-			$this->setIdusuario($row['idusuario']);
+			$this->setIdusuario($row['idusuario']); //envia os dados recebidos para os set´s
 			$this->setDesclogin($row['desclogin']);
 			$this->setDessenha($row['dessenha']);
 			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
@@ -63,16 +63,52 @@ class Usuario {
 
 	public function __toString() {
 
-		return json_encode(array (
-			"idusuario"=>$this->getIdusuario(),
-			"desclogin"=>$this->getDesclogin(),
-			"dessenha"=>$this->getDessenha(),
-			"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:m:s"),			// é um objeto datetime, que tem o método format que pode ser utilizado
+		return json_encode(array (                                                   // vamos retornar os dados num json_encode com um array, com os nomes
+			"id usuario"=>$this->getIdusuario(),                                      // que eu quero que ele exiba (nome dos campos da tabela), usando os get
+			"desc login"=>$this->getDesclogin(),										 // para trazer os dados
+			"des  senha"=>$this->getDessenha(),
+			"dt cadastro"=>$this->getDtcadastro()->format("d/m/Y H:m:s"),			// é um objeto datetime, que tem o método format que pode ser utilizado
 
 
 		));
 	}
 
+// listar todos os usuários da tabela
+	public static function getList() { //método static não precisa ser instanciado para ser utilizado, chama com: usuario::getList
+
+		$sql = new Sql();
+		return $sql->select("Select * FROM tb_usuarios ORDER BY desclogin;");
+
+	}
+
+	public static function search($login) {
+		$sql = new Sql();
+		return $sql->select("Select * from tb_usuarios WHERE desclogin LIKE :search ORDER BY desclogin", array(
+				':search'=>"%".$login."%"));
+	}
+
+
+	public function login($Login, $password) {
+		$sql = new SQL();
+
+		$results = $sql->select("SELECT * FROM tb_usuarios WHERE desclogin = :login and dessenha = :password", array(
+			":login"=>$Login,
+			":password"=>$password			
+		));
+		if (count($results) > 0) {         // ou if (isset($results[0]))
+
+			$row = $results[0];            // como é um array de array, e retorna apenas 1 reg, pegamos a posição zero
+
+			$this->setIdusuario($row['idusuario']); //envia os dados recebidos para os set´s
+			$this->setDesclogin($row['desclogin']);
+			$this->setDessenha($row['dessenha']);
+			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
+		} else {
+			throw new Exception("Login e/ou senha invalidos");
+		}
+
+
+	}
 
 }
 
