@@ -44,16 +44,19 @@ $aluno->setDessenha("@luno0");
 
 $aluno->insert();
 
-echo $aluno;*/
+echo $aluno;
+*/
 
-
-//***************************************
-// insert de um usuario novo
-echo("Rotina de insert usando o construtor...");
-$aluno = new Usuario("aluno Const", "123456");   // sempre passar os param que são necessários no método construtor
+//*********************************************
+// insert de um usuario novo , com construtor
+/*$aluno = new Usuario("alunconst", "@56");   // sempre passar os param que são necessários no método construtor
 
 $aluno->insert();
 
-echo $aluno;
+echo $aluno;*/
 
+$usuario = new Usuario();
+$usuario->loadById(6);
+$usuario->atualiza("professor", "!@098");
+echo $usuario;
 ?>

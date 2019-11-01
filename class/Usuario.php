@@ -60,7 +60,7 @@ class Usuario {
 //			$this->setDesclogin($row['desclogin']);
 //			$this->setDessenha($row['dessenha']);
 //			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
-			$this->setData($results[0]);
+			$this->setData($results[0]);    // nova linha, após comentar as linhas acima
 		}
 
 	}
@@ -71,7 +71,7 @@ class Usuario {
 		"idusuario"=>$this->getIdusuario(),    // que eu quero que ele exiba (nome dos campos da tabela), usando os get
 		"desclogin"=>$this->getDesclogin(),			 // para trazer os dados
 		"dessenha"=>$this->getDessenha(),
-		"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:m:s"),	// é um objeto datetime, que tem o método format que pode ser utilizado
+		"dtcadastro"=>$this->getDtcadastro()->format('d/m/Y H:i:s'),	// é um objeto datetime, que tem o método format que pode ser utilizado
 		));
 	}
 
@@ -139,8 +139,21 @@ class Usuario {
 	}
 
 
-	public function __construtor($login="", $password="") {
-			$this->setDesclogin($Login);
+	public 	function atualiza($login="", $password="") {		
+			$this->setDesclogin($login);
+			$this->setDessenha($password);
+			$sql = new Sql();
+			$sql->query("Update tb_usuarios SET desclogin = :LOGIN, dessenha= :PASSWORD WHERE idusuario = :ID", array(
+							':LOGIN'=>$this->getDesclogin(),
+							':PASSWORD'=>$this->getDessenha(),
+							':ID'=>$this->getIdusuario()
+						));
+
+	}
+
+
+	public function __construct($login="", $password="") {
+			$this->setDesclogin($login);
 			$this->setDessenha($password);
 
 	}
