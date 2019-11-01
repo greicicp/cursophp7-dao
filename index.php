@@ -55,8 +55,17 @@ $aluno->insert();
 
 echo $aluno;*/
 
-$usuario = new Usuario();
+/* alteração de um usuário */
+/*$usuario = new Usuario();
 $usuario->loadById(6);
 $usuario->atualiza("professor", "!@098");
 echo $usuario;
+*/
+
+/* Deletar um usuário */
+$usuario = new Usuario();
+$usuario->loadbyId(7);
+$usuario->delete();
+echo $usuario;
+
 ?>

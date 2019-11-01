@@ -138,6 +138,17 @@ class Usuario {
 		}
 	}
 
+	public function delete(){
+		$sql = new Sql();
+		$sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+				':ID'=>$this->getIdusuario()
+
+		));    // depois que apaga no banco, melhor zerar na memória do objeto
+		$this->setIdusuario(0);
+		$this->setDesclogin("");
+		$this->setDessenha("");
+		$this->setDtcadastro(new DateTime());
+	}	
 
 	public 	function atualiza($login="", $password="") {		
 			$this->setDesclogin($login);
