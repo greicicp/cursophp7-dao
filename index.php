@@ -30,9 +30,30 @@ require_once("config.php");
 
 //***************************************
 // carrega um usuários buscando pelo login e senha
-$usuario = new Usuario();
-$usuario->login("root", "?@#$");
+//$usuario = new Usuario();
+//$usuario->login("root", "?@#$");
 
-echo $usuario;
+//echo $usuario;
+
+//***************************************
+// insert de um usuario novo
+/*echo("Rotina de insert ................");
+$aluno = new Usuario();
+$aluno->setDescLogin("aluno");
+$aluno->setDessenha("@luno0");
+
+$aluno->insert();
+
+echo $aluno;*/
+
+
+//***************************************
+// insert de um usuario novo
+echo("Rotina de insert usando o construtor...");
+$aluno = new Usuario("aluno Const", "123456");   // sempre passar os param que são necessários no método construtor
+
+$aluno->insert();
+
+echo $aluno;
 
 ?>

@@ -51,27 +51,31 @@ class Usuario {
 		));
 		if (count($results) > 0) {         // ou if (isset($results[0]))
 
-			$row = $results[0];            // como é um array de array, e retorna apenas 1 reg, pegamos a posição zero
+	
+// linhas abaixo, agora utilizando setData()
 
-			$this->setIdusuario($row['idusuario']); //envia os dados recebidos para os set´s
-			$this->setDesclogin($row['desclogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
+//			$row = $results[0];            // como é um array de array, e retorna apenas 1 reg, pegamos a posição zero
+
+//			$this->setIdusuario($row['idusuario']); //envia os dados recebidos para os set´s
+//			$this->setDesclogin($row['desclogin']);
+//			$this->setDessenha($row['dessenha']);
+//			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
+			$this->setData($results[0]);
 		}
 
 	}
 
+
 	public function __toString() {
-
-		return json_encode(array (                                                   // vamos retornar os dados num json_encode com um array, com os nomes
-			"id usuario"=>$this->getIdusuario(),                                      // que eu quero que ele exiba (nome dos campos da tabela), usando os get
-			"desc login"=>$this->getDesclogin(),										 // para trazer os dados
-			"des  senha"=>$this->getDessenha(),
-			"dt cadastro"=>$this->getDtcadastro()->format("d/m/Y H:m:s"),			// é um objeto datetime, que tem o método format que pode ser utilizado
-
-
+		return json_encode(array (      // vamos retornar os dados num json_encode com um array, com os nomes
+		"idusuario"=>$this->getIdusuario(),    // que eu quero que ele exiba (nome dos campos da tabela), usando os get
+		"desclogin"=>$this->getDesclogin(),			 // para trazer os dados
+		"dessenha"=>$this->getDessenha(),
+		"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:m:s"),	// é um objeto datetime, que tem o método format que pode ser utilizado
 		));
 	}
+
+
 
 // listar todos os usuários da tabela
 	public static function getList() { //método static não precisa ser instanciado para ser utilizado, chama com: usuario::getList
@@ -97,16 +101,47 @@ class Usuario {
 		));
 		if (count($results) > 0) {         // ou if (isset($results[0]))
 
-			$row = $results[0];            // como é um array de array, e retorna apenas 1 reg, pegamos a posição zero
+			//$row = $results[0];            // como é um array de array, e retorna apenas 1 reg, pegamos a posição zero
 
-			$this->setIdusuario($row['idusuario']); //envia os dados recebidos para os set´s
-			$this->setDesclogin($row['desclogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
+// linhas abaixo, colocadas da função setData();
+//			$this->setIdusuario($row['idusuario']); //envia os dados recebidos para os set´s
+//			$this->setDesclogin($row['desclogin']);
+//			$this->setDessenha($row['dessenha']);
+//			$this->setDtcadastro(new DateTime($row['dtcadastro']));		// vem no formato ano/mes/dia	
+			$this->setData($results[0]);
 		} else {
 			throw new Exception("Login e/ou senha invalidos");
 		}
 
+
+	}
+
+	public function setData($data){
+			$this->setIdusuario($data['idusuario']); //envia os dados recebidos para os set´s
+			$this->setDesclogin($data['desclogin']);
+			$this->setDessenha($data['dessenha']);
+			$this->setDtcadastro(new DateTime($data['dtcadastro']));		// vem no formato ano/mes/dia						
+
+	} 
+
+
+	public function insert() {
+		$sql = new Sql();
+
+		$results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(// procedure no MySql é chamada com CALL, se for sqlserver é com Execute
+			':LOGIN'=>$this->getDesclogin(),	
+			':PASSWORD'=>$this->getDessenha()			
+		));
+
+		if (count($results) > 0) {
+			$this->setData($results[0]);
+		}
+	}
+
+
+	public function __construtor($login="", $password="") {
+			$this->setDesclogin($Login);
+			$this->setDessenha($password);
 
 	}
 
